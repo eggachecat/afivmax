@@ -1,28 +1,35 @@
+"""max的一个implementation
+"""
+
+
 def afiv_max(*args, key=None, **kwargs):
-    """
+    """取出最大值
+    max(iterable, \*[, default=obj, key=func]) -> value\n
+    max(arg1, arg2, \*args, \*[, key=func]) -> value
 
-    max(iterable, *[, default=obj, key=func]) -> value
-    max(arg1, arg2, *args, *[, key=func]) -> value
+    Note:
+        使用``kwargs``是因为原生的max在执行``max(1, 2, default=10)``会raise一个TypeError, 使用``default=None``比较难完成这一个Feature.
 
-    参考了cpython的min_max的[实现](https://github.com/python/cpython/blob/master/Python/bltinmodule.c#L1583)
+    Args:
+        args: iterable or arg1,arg2,...
+            取最大值的source
+        key: func, optional
+            从args取出比较对象的函数
+        default: None or DEFAULT_VALUE
+            1. 如果args的第一个元素为iterable且为空时返回的值\n
+            2. 如果是arg1,arg2,的形式会raise一个TypeError
 
+    Returns:
+        max_item: 就是返回最大值
 
+    Raises:
+        TypeError:
+            1. 当args为空的时候\n
+            2. 有除了default和key以外参数的时候\n
+            3. 当arg1,arg2,...的时候有default参数的时候\n
+            4. key返回的值不支持'>'的时候\n
+            5. args为iterable且为空且default没有提供的时候
 
-    [1]如果只有一个argument
-        - 必须是iterable的
-        - 将会返回最大的那个
-
-    [2]如果有多个arguments:
-        - 将会返回他们中最大的那个
-
-    参数:
-        - 其中default对于
-
-
-    其他:
-        - 原生的max在执行
-            - max(1, 2, default=10) 会发生 TypeError
-            - 所以如果定义: default=None 的话比较难完成这一个Feature
 
     """
     n_args = len(args)
@@ -33,7 +40,7 @@ def afiv_max(*args, key=None, **kwargs):
         # args is always iterable since itself is a list
         it = iter(args)
 
-        if kwargs.get("default", None) is not None:
+        if "default" in kwargs:
             raise TypeError("Cannot specify a default for afiv_max() with multiple positional arguments")
 
         if n_kwargs > 0:
@@ -80,9 +87,8 @@ def afiv_max(*args, key=None, **kwargs):
                 max_val = val
 
     if max_val is None:
-        default = kwargs.get("default", None)
-        if default is not None:
-            max_item = default
+        if "default" in kwargs:
+            max_item = kwargs["default"]
         else:
             raise TypeError("Find the max value from an iterable which is empty!")
 
