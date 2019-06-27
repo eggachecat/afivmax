@@ -3,7 +3,7 @@ sudo: false
 python:
   - "3.5"
 install:
-  - npm install -r requirements.txt
+  - pip install -r requirements.txt
   - pip install pytest
   - pip install pytest-cov
   - pip install coveralls
