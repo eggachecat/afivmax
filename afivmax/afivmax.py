@@ -30,13 +30,15 @@ def afiv_max(*args, key=None, **kwargs):
         raise TypeError("No arguments provided!")
     n_kwargs = len(kwargs)
     if n_args > 1:
-        try:
-            it = iter(args)
-        except TypeError:
-            raise TypeError
+        # args is always iterable since itself is a list
+        it = iter(args)
 
         if kwargs.get("default", None) is not None:
             raise TypeError("Cannot specify a default for afiv_max() with multiple positional arguments")
+
+        if n_kwargs > 0:
+            raise TypeError("TypeError: function takes at most 2 arguments ({} given)".format(n_kwargs))
+
     else:
         try:
             it = iter(args[0])

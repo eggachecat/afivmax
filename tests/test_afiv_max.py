@@ -29,11 +29,34 @@ def test_iterable_with_key():
 
     assert 9 == afiv_max([TmpClass(x) for x in range(10)], key=lambda x: x.val).val
 
+    with pytest.raises(TypeError):
+        # key func should return something!
+        def _f(x):
+            pass
+
+        afiv_max([1, 2, 3], key=_f)
+
+    with pytest.raises(TypeError):
+        # what key func return should be supported  by '>'
+        def _f(x):
+            return TmpClass(x)
+
+        afiv_max([1, 2, 3], key=_f)
+
 
 def test_iterable_default():
     """iterable with default only"""
     assert 10 == afiv_max([], default=10), "iterable with default only"
     assert 3 == afiv_max([1, 2, 3], default=10), "iterable with default only"
+
+
+def test_iterable_with_other_keywords():
+    """args with key and default, should raise exception"""
+    with pytest.raises(TypeError):
+        afiv_max([1, 2, 3], keyword=10)
+
+    with pytest.raises(TypeError):
+        afiv_max([1, 2, 3], keyword=100, default=10)
 
 
 def test_iterable_with_key_and_default():
@@ -57,7 +80,7 @@ def test_args_with_no_key_and_default():
     """normal case"""
     assert 3 == afiv_max(1, 2, 3), "normal case with args"
     with pytest.raises(TypeError):
-        assert 3 == afiv_max(3), "Only one argument which is not iterable is not allowed"
+        afiv_max(3)
 
 
 def test_args_with_key():
@@ -70,11 +93,34 @@ def test_args_with_key():
 
     assert 9 == afiv_max(*[TmpClass(x) for x in range(10)], key=lambda x: x.val).val
 
+    with pytest.raises(TypeError):
+        # key func should return something!
+        def _f(x):
+            pass
+
+        afiv_max(1, 2, 3, key=_f)
+
+    with pytest.raises(TypeError):
+        # what key func return should be supported  by '>'
+        def _f(x):
+            return TmpClass(x)
+
+        afiv_max(1, 2, 3, key=_f)
+
 
 def test_args_with_default():
     """args with key and default, should raise exception"""
     with pytest.raises(TypeError):
         afiv_max(1, 2, 3, default=10)
+
+
+def test_args_with_other_keywords():
+    """args with key and default, should raise exception"""
+    with pytest.raises(TypeError):
+        afiv_max(1, 2, 3, keyword=10)
+
+    with pytest.raises(TypeError):
+        afiv_max(1, 2, 3, keyword=10)
 
 
 def test_args_with_duplication():
