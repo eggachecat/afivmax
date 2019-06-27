@@ -5,7 +5,7 @@ with open("README.md", "r", encoding='UTF-8') as fh:
 
 setuptools.setup(
     name="afivmax",
-    version="0.2.0",
+    version="0.3.0",
     author="sunao",
     author_email="sunao_0626@hotmail.com",
     description="Interview problem of Ant Fin",
